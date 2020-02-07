@@ -96,6 +96,7 @@ resource "aws_lb_listener" "public_http_lb_listener" {
   port = 80
 }
 
+/*
 resource "aws_lb_listener" "public_https_lb_listener" {
   default_action {
     target_group_arn = aws_lb_target_group.wp_lb_target.arn
@@ -106,4 +107,4 @@ resource "aws_lb_listener" "public_https_lb_listener" {
   port = 443
   certificate_arn = var.certificate_arn
   ssl_policy = "ELBSecurityPolicy-2016-08"
-}
+}*/
