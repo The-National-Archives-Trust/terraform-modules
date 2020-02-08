@@ -23,7 +23,7 @@ resource "aws_launch_configuration" "wp_launch_config" {
   name_prefix = "wp${var.service}-"
   image_id = var.ami_id
   instance_type = var.instance_type
-  iam_instance_profile = aws_iam_instance_profile.ecs.name
+  # iam_instance_profile = aws_iam_instance_profile.ecs.name
   security_groups = [aws_security_group.wp_app_access.id]
   # user_data = data.template_file.ec2_userdata.rendered
   key_name = var.key_name
