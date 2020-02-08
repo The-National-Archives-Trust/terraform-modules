@@ -25,20 +25,20 @@ resource "aws_launch_configuration" "wp_launch_config" {
   instance_type = var.instance_type
   iam_instance_profile = aws_iam_instance_profile.ecs.name
   security_groups = [aws_security_group.wp_app_access.id]
-  user_data = data.template_file.ec2_userdata.rendered
+  # user_data = data.template_file.ec2_userdata.rendered
   key_name = var.key_name
 
   lifecycle { create_before_destroy = true }
 }
 
-data "template_file" "ec2_userdata" {
+/*data "template_file" "ec2_userdata" {
   template = file("${path.module}/templates/userdata.sh")
   vars = {
     ecs_cluster = aws_ecs_cluster.ecs.name
     ecr_url   = var.ecr_url
     image_tag = var.image_tag
   }
-}
+}*/
 
 resource "aws_autoscaling_group" "wp" {
   name = "wp-${var.environment}-${var.service}-asg"
@@ -66,7 +66,7 @@ resource "aws_lb_target_group" "wp_lb_target" {
   vpc_id = var.vpc_id
   health_check {
     interval = 30
-    path = "/wp-content/healthcheck.html"
+    path = "/"
     port = "traffic-port"
     timeout = 5
     healthy_threshold = 2

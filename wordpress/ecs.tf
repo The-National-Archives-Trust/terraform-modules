@@ -1,3 +1,4 @@
+/*
 resource "aws_ecs_cluster" "ecs" {
   name = "wp-${var.environment}-${var.service}-cluster"
 
@@ -36,4 +37,4 @@ data "template_file" "wordpress_task" {
     wp_domain = var.wp_domain
     wp_site_name = var.service
   }
-}
+}*/

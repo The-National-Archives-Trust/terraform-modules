@@ -1,3 +1,4 @@
+/*
 resource "aws_iam_role" "wp_ecs_role" {
   name               = "wp-${var.environment}-${var.service}-ecs-role"
   assume_role_policy = <<EOF
@@ -26,4 +27,4 @@ resource "aws_iam_instance_profile" "ecs" {
   name = "wp-${var.environment}-${var.service}-ecs-instance-profile"
   path = "/"
   role = aws_iam_role.wp_ecs_role.name
-}
+}*/
