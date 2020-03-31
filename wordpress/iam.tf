@@ -1,6 +1,5 @@
-/*
-resource "aws_iam_role" "wp_ecs_role" {
-  name               = "wp-${var.environment}-${var.service}-ecs-role"
+resource "aws_iam_role" "wp_role" {
+  name               = "${var.service}-${var.environment}-role"
   assume_role_policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -18,13 +17,8 @@ resource "aws_iam_role" "wp_ecs_role" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_instance_role_policy" {
-  policy_arn    = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
-  role          = aws_iam_role.wp_ecs_role.id
-}
-
-resource "aws_iam_instance_profile" "ecs" {
-  name = "wp-${var.environment}-${var.service}-ecs-instance-profile"
+resource "aws_iam_instance_profile" "wordpress" {
+  name = "${var.service}-${var.environment}-instance-profile"
   path = "/"
-  role = aws_iam_role.wp_ecs_role.name
-}*/
+  role = aws_iam_role.wp_role.name
+}
