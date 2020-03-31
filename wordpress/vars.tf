@@ -18,6 +18,14 @@ variable "public_subnet_2" {
   default = ""
 }
 
+variable "private_subnet_1" {
+  default = ""
+}
+
+variable "private_subnet_2" {
+  default = ""
+}
+
 variable "instance_type" {
   default = ""
 }
@@ -30,10 +38,6 @@ variable "key_name" {
   default = ""
 }
 
-variable "route53_zone_id" {
-  default = ""
-}
-
-variable "route53_record_name" {
+variable "public_lb_ssl_cert_arn" {
   default = ""
 }
