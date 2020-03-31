@@ -79,7 +79,7 @@ resource "aws_security_group_rule" "wp_app_https_ingress" {
   source_security_group_id = aws_security_group.wp_public_access.id
 }
 
-resource "aws_security_group_rule" "wp_app_https_ingress" {
+resource "aws_security_group_rule" "wp_app_ssh_ingress" {
   from_port = 22
   protocol = "tcp"
   security_group_id = aws_security_group.wp_app_access.id
