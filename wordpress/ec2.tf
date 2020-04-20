@@ -16,35 +16,24 @@ resource "aws_lb" "public_lb" {
   }
 }
 
-# WordPress autoscaling group and launch config
-resource "aws_launch_configuration" "wp_launch_config" {
-  name_prefix = "${var.service}${var.environment}"
-  image_id = var.ami_id
+resource "aws_instance" "wp" {
+  ami = var.ami_id
   instance_type = var.instance_type
-  iam_instance_profile = aws_iam_instance_profile.wordpress.name
-  security_groups = [aws_security_group.wp_app_access.id]
   key_name = var.key_name
+  vpc_security_group_ids = [aws_security_group.wp_app_access.id]
+  iam_instance_profile = aws_iam_instance_profile.wordpress.name
+  subnet_id = var.private_subnet_1
 
-  lifecycle { create_before_destroy = true }
+  tags = {
+    Name = "${var.service}-${var.environment}"
+    Service = var.service
+    Terraform = true
+  }
 }
 
-resource "aws_autoscaling_group" "wp" {
-  name = "${var.service}-${var.environment}-asg"
-  launch_configuration = aws_launch_configuration.wp_launch_config.name
-  vpc_zone_identifier = [
-    var.private_subnet_1,
-    var.private_subnet_2
-  ]
-  max_size = 1
-  min_size = 1
-  desired_capacity = 1
-  health_check_grace_period = 300
-  health_check_type = "EC2"
-  tags = list(
-      map("key", "Name", "value", "${var.service}-${var.environment}", "propagate_at_launch", true),
-      map("key", "Service", "value", "wordpress", "propagate_at_launch", true),
-      map("key", "Terraform", "value", "true", "propagate_at_launch", true)
-    )
+resource "aws_lb_target_group_attachment" "public_asg_attachment" {
+  target_group_arn = aws_lb_target_group.wp_lb_target.id
+  target_id = aws_instance.wp.id
 }
 
 resource "aws_lb_target_group" "wp_lb_target" {
@@ -67,11 +56,6 @@ resource "aws_lb_target_group" "wp_lb_target" {
     Environment = var.environment
     Terraform = true
   }
-}
-
-resource "aws_autoscaling_attachment" "public_asg_attachment" {
-  autoscaling_group_name = aws_autoscaling_group.wp.id
-  alb_target_group_arn = aws_lb_target_group.wp_lb_target.arn
 }
 
 resource "aws_lb_listener" "public_http_lb_listener" {
